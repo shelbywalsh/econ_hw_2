@@ -44,11 +44,18 @@ comp_x_a <- comp_x_a %>%
 ```{r, results = "asis", fig.align= 'center'}
 ggplot(data = comp_x_a, aes(x = Abatement,
                             y = MC_A)) +
-  geom_point() +
+  geom_point(color= "darkgreen") +
   geom_line(data = comp_x_a, aes(x= Abatement,
-                                 y=lm_a)) +
+                                 y=lm_a),
+            color = "darkgreen") +
   theme_light() +
-  labs(title = "Company A")
+  labs(title = "Country X: Sectore A",
+       x = "Abatement (tons)",
+       y = "$/ton") +
+theme(plot.title = element_text(size = 14,
+                                  face = 4,
+        hjust = 0.5)) +
+  theme(axis.title.y = element_text(size = 12))
   
 ```
 
@@ -83,13 +90,20 @@ comp_x_b <- comp_x_b %>%
 ```{r}
 ggplot(data = comp_x_b, aes(x = Abatement,
                             y = MC_B)) +
-  geom_point() +
+  geom_point(color = "darkblue") +
   #geom_line(data = comp_x_b, aes(x= Abatement,
                                  #y=lm_b)) +
   geom_line(data = comp_x_b, aes(x= Abatement,
-                                 y=lm_poly_b)) +
+                                 y=lm_poly_b),
+            color = "darkblue") +
   theme_light() +
-  labs(title = "Company B")
+  labs(title = "Country X: Sectore B",
+       x = "Abatement (tons)",
+       y = "$/ton") +
+theme(plot.title = element_text(size = 14,
+                                  face = 4,
+        hjust = 0.5)) +
+  theme(axis.title.y = element_text(size = 12))
 ```
 
 ```{r}
@@ -117,13 +131,20 @@ comp_x_c <- comp_x_c %>%
 ```{r}
 ggplot(data = comp_x_c, aes(x = Abatement,
                             y = MC_C)) +
-  geom_point() +
+  geom_point(color = "darkred") +
   geom_line(data = comp_x_c, aes(x= Abatement,
-                                 y=lm_c)) +
+                                 y=lm_c),
+            color = "darkred") +
   #geom_line(data = comp_x_c, aes(x= Abatement,
                                  #y=lm_poly_c))+
   theme_light() +
-  labs(title = "Company C")
+  labs(title = "Country X: Sectore C",
+       x = "Abatement (tons)",
+       y = "$/ton") +
+theme(plot.title = element_text(size = 14,
+                                  face = 4,
+        hjust = 0.5)) +
+  theme(axis.title.y = element_text(size = 12))
 ```
 
 ```{r}
@@ -151,12 +172,58 @@ comp_x_d <- comp_x_d %>%
 ```{r}
 ggplot(data = comp_x_d, aes(x = Abatement,
                             y = MC_D)) +
-  geom_point() +
+  geom_point(color = "darksalmon") +
   #geom_line(data = comp_x_d, aes(x= Abatement,
                                  #y=lm_d)) +
   geom_line(data = comp_x_d, aes(x= Abatement,
-                                 y=lm_poly_d)) +
+                                 y=lm_poly_d),
+            color = "darksalmon") +
   theme_light() +
-  labs(title = "Company D")
+  labs(title = "Country Y: Sectore D",
+       x = "Abatement (tons)",
+       y = "$/ton") +
+theme(plot.title = element_text(size = 14,
+                                  face = 4,
+        hjust = 0.5)) +
+  theme(axis.title.y = element_text(size = 12))
   
 ```
+
+```{r}
+#all 4 marginal costs on one graph
+
+mc_estimate <- econ_abb %>% 
+  mutate(lm_a = 1 + 0.513*Abatement) %>% 
+   mutate(lm_poly_b = -6.440 +5.577*Abatement^0.5) %>% 
+   mutate(lm_c = -26.81 + 1.13*Abatement) %>% 
+  mutate(lm_poly_d = 2.098529 +0.004088*Abatement^2) %>% 
+  select(Abatement, lm_a, lm_poly_b, lm_c, lm_poly_d)
+  
+```
+
+```{r}
+ggplot(data = mc_estimate, aes(x = Abatement,
+                            y = lm_c, lm_a, lm_poly_b, lm_poly_d)) +
+  geom_line(data = mc_estimate, aes(x = Abatement,
+                                    y = lm_a),
+            color = "darkgreen")+
+  geom_line(data = mc_estimate, aes(x = Abatement,
+                                    y = lm_poly_b),
+            color = "darkblue")+
+  geom_line(data = mc_estimate, aes(x = Abatement,
+                                    y = lm_c),
+            color = "darkred")+
+  geom_line(data = mc_estimate, aes(x = Abatement,
+                                    y = lm_poly_d),
+            color = "darksalmon")+
+  theme_light() +
+  labs(title = "Marginal Cost Curves for Sectors A, B, C, D",
+       x = "Abatement (tons)",
+       y = "$/ton") +
+theme(plot.title = element_text(size = 14,
+                                  face = 4,
+        hjust = 0.5)) +
+  theme(axis.title.y = element_text(size = 12)) 
+  
+```
+
