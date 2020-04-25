@@ -78,13 +78,18 @@ comp_x_b_lm
 
 comp_x_b_poly <- lm(MC_B ~ I(Abatement^0.5), data= comp_x_b)
 
+comp_x_b_2 <- lm(MC_B ~ Abatement + I(Abatement^2), data= comp_x_b)
+
 comp_x_b_poly
+
+comp_x_b_2
 ```
 
 ```{r}
 comp_x_b <- comp_x_b %>% 
   mutate(lm_b = 8.7853 + 0.3918*Abatement) %>% 
-   mutate(lm_poly_b = -6.440 +5.577*Abatement^0.5)
+   mutate(lm_poly_b = -6.440 +5.577*Abatement^0.5) %>% 
+  mutate(lm_poly_b_2 = -2.008211 -0.003084*Abatement^2)
 ```
 
 ```{r}
@@ -96,6 +101,9 @@ ggplot(data = comp_x_b, aes(x = Abatement,
   geom_line(data = comp_x_b, aes(x= Abatement,
                                  y=lm_poly_b),
             color = "darkblue") +
+  geom_line (data = comp_x_b, aes(x = Abatement,
+                                  y = lm_poly_b_2),
+             color= "darkblue")+
   theme_light() +
   labs(title = "Country X: Sectore B",
        x = "Abatement (tons)",
@@ -223,7 +231,7 @@ ggplot(data = mc_estimate, aes(x = Abatement,
 theme(plot.title = element_text(size = 14,
                                   face = 4,
         hjust = 0.5)) +
-  theme(axis.title.y = element_text(size = 12)) 
+  theme(axis.title.y = element_text(size = 12))
   
 ```
 
