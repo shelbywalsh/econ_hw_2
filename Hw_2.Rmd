@@ -1,0 +1,162 @@
+---
+title: "Econ_hw_2"
+author: "Shelby Walsh and AJ Zekanoski"
+date: "4/23/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE, message = FALSE, warning = FALSE, echo = FALSE}
+rm(list = ls())
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(tidyr)
+library(janitor)
+library(kableExtra)
+library(car)
+library(devtools)
+library(broom)
+library(ggpubr)
+library(ggbeeswarm)
+library(RColorBrewer)
+library(effsize)
+library(stargazer)
+```
+
+```{r}
+econ_abb <- read_csv("HW2_Data.csv")
+
+comp_x_a <- econ_abb %>%
+  select(Abatement, MC_A)
+```
+
+```{r}
+comp_x_a_lm <- lm(formula = MC_A ~ Abatement, data = comp_x_a)
+
+comp_x_a_lm
+```
+
+```{r}
+comp_x_a <- comp_x_a %>% 
+  mutate(lm_a = 1 + 0.513*Abatement)
+```
+
+
+```{r, results = "asis", fig.align= 'center'}
+ggplot(data = comp_x_a, aes(x = Abatement,
+                            y = MC_A)) +
+  geom_point() +
+  geom_line(data = comp_x_a, aes(x= Abatement,
+                                 y=lm_a)) +
+  theme_light() +
+  labs(title = "Company A")
+  
+```
+
+```{r}
+comp_x_a_lm <- lm(formula = MC_A ~ Abatement, data = comp_x_a)
+
+comp_x_a_lm
+```
+
+```{r}
+comp_x_b <- econ_abb %>%
+  select(Abatement, MC_B)
+```
+
+
+```{r}
+comp_x_b_lm <- lm(formula = MC_B ~ Abatement, data = comp_x_b)
+
+comp_x_b_lm
+
+comp_x_b_poly <- lm(MC_B ~ I(Abatement^0.5), data= comp_x_b)
+
+comp_x_b_poly
+```
+
+```{r}
+comp_x_b <- comp_x_b %>% 
+  mutate(lm_b = 8.7853 + 0.3918*Abatement) %>% 
+   mutate(lm_poly_b = -6.440 +5.577*Abatement^0.5)
+```
+
+```{r}
+ggplot(data = comp_x_b, aes(x = Abatement,
+                            y = MC_B)) +
+  geom_point() +
+  #geom_line(data = comp_x_b, aes(x= Abatement,
+                                 #y=lm_b)) +
+  geom_line(data = comp_x_b, aes(x= Abatement,
+                                 y=lm_poly_b)) +
+  theme_light() +
+  labs(title = "Company B")
+```
+
+```{r}
+comp_x_c <- econ_abb %>%
+  select(Abatement, MC_C)
+```
+
+
+```{r}
+comp_x_c_lm <- lm(formula = MC_C ~ Abatement, data = comp_x_c)
+
+comp_x_c_lm
+
+comp_x_c_poly <- lm(MC_C ~ Abatement + I(Abatement^2), data= comp_x_c)
+
+comp_x_c_poly
+```
+
+```{r}
+comp_x_c <- comp_x_c %>% 
+  mutate(lm_c = -26.81 + 1.13*Abatement) %>% 
+  mutate(lm_poly_c = -7.94142 +0.00539*Abatement^2)
+```
+
+```{r}
+ggplot(data = comp_x_c, aes(x = Abatement,
+                            y = MC_C)) +
+  geom_point() +
+  geom_line(data = comp_x_c, aes(x= Abatement,
+                                 y=lm_c)) +
+  #geom_line(data = comp_x_c, aes(x= Abatement,
+                                 #y=lm_poly_c))+
+  theme_light() +
+  labs(title = "Company C")
+```
+
+```{r}
+comp_x_d <- econ_abb %>%
+  select(Abatement, MC_D)
+```
+
+
+```{r}
+comp_x_d_lm <- lm(formula = MC_D ~ Abatement, data = comp_x_d)
+
+comp_x_d_lm
+
+comp_x_d_poly <- lm(MC_D ~ Abatement + I(Abatement^2), data= comp_x_d)
+
+comp_x_d_poly
+```
+
+```{r}
+comp_x_d <- comp_x_d %>% 
+  mutate(lm_d = -12.2103 + 0.5535*Abatement) %>% 
+  mutate(lm_poly_d = 2.098529 +0.004088*Abatement^2)
+```
+
+```{r}
+ggplot(data = comp_x_d, aes(x = Abatement,
+                            y = MC_D)) +
+  geom_point() +
+  #geom_line(data = comp_x_d, aes(x= Abatement,
+                                 #y=lm_d)) +
+  geom_line(data = comp_x_d, aes(x= Abatement,
+                                 y=lm_poly_d)) +
+  theme_light() +
+  labs(title = "Company D")
+  
+```
