@@ -83,6 +83,8 @@ comp_x_b_2 <- lm(MC_B ~ Abatement + I(Abatement^2), data= comp_x_b)
 comp_x_b_poly
 
 comp_x_b_2
+
+plot(comp_x_b_poly)
 ```
 
 ```{r}
